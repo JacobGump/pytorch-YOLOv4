@@ -208,7 +208,8 @@ class Yolo_loss(nn.Module):
             truth_box[:n, 0] = truth_x_all[b, :n]
             truth_box[:n, 1] = truth_y_all[b, :n]
 
-            pred_ious = bboxes_iou(pred[b].view(-1, 4), truth_box, xyxy=False)
+
+            pred_ious = bboxes_iou(pred[b].reshape(-1, 4), truth_box, xyxy=False)
             pred_best_iou, _ = pred_ious.max(dim=1)
             pred_best_iou = (pred_best_iou > self.ignore_thre)
             pred_best_iou = pred_best_iou.view(pred[b].shape[:3])
@@ -544,7 +545,7 @@ def get_args(**kwargs):
                         help='dataset dir', dest='dataset_dir')
     parser.add_argument('-pretrained', type=str, default=None, help='pretrained yolov4.conv.137')
     parser.add_argument('-classes', type=int, default=80, help='dataset classes')
-    parser.add_argument('-train_label_path', dest='train_label', type=str, default='train.txt', help="train label path")
+    parser.add_argument('-train_label_path', dest='train_label', type=str, default='./data/train.txt', help="train label path")
     parser.add_argument(
         '-optimizer', type=str, default='adam',
         help='training optimizer',

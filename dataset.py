@@ -137,7 +137,9 @@ def image_data_augmentation(mat, w, h, pleft, ptop, swidth, sheight, flip, dhue,
         if dsat != 1 or dexp != 1 or dhue != 0:
             if img.shape[2] >= 3:
                 hsv_src = cv2.cvtColor(sized.astype(np.float32), cv2.COLOR_RGB2HSV)  # RGB to HSV
-                hsv = cv2.split(hsv_src)
+                # print(hsv_src)
+                hsv = list(cv2.split(hsv_src))
+
                 hsv[1] *= dsat
                 hsv[2] *= dexp
                 hsv[0] += 179 * dhue
@@ -174,8 +176,8 @@ def image_data_augmentation(mat, w, h, pleft, ptop, swidth, sheight, flip, dhue,
             gaussian_noise = max(gaussian_noise, 0)
             cv2.randn(noise, 0, gaussian_noise)  # mean and variance
             sized = sized + noise
-    except:
-        print("OpenCV can't augment image: " + str(w) + " x " + str(h))
+    except Exception as e:
+        print("OpenCV can't augment image: " + str(w) + " x " + str(h), e)
         sized = mat
 
     return sized
@@ -216,6 +218,7 @@ def blend_truth_mosaic(out_img, img, bboxes, w, h, cut_x, cut_y, i_mixup,
     top_shift = min(top_shift, h - cut_y)
     right_shift = min(right_shift, cut_x)
     bot_shift = min(bot_shift, cut_y)
+
 
     if i_mixup == 0:
         bboxes = filter_truth(bboxes, left_shift, top_shift, cut_x, cut_y, 0, 0)

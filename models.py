@@ -421,8 +421,8 @@ class Yolov4(nn.Module):
         # neck
         self.neek = Neck(inference)
         self.num_classes = n_classes
-        self.width = 416
-        self.height = 416
+        self.width = 608
+        self.height = 608
         # yolov4conv137
         if yolov4conv137weight:
             _model = nn.Sequential(self.down1, self.down2, self.down3, self.down4, self.down5, self.neck)
