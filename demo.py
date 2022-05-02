@@ -17,6 +17,7 @@
 from tool.utils import *
 from tool.torch_utils import *
 from tool.darknet2pytorch import Darknet
+from models import Yolov4
 import torch
 import argparse
 
@@ -25,10 +26,8 @@ use_cuda = True
 
 def detect_cv2(cfgfile, weightfile, imgfile):
     import cv2
-    m = Darknet(cfgfile)
-
-    m.print_network()
-    m.load_weights(weightfile)
+    m = Yolov4(inference = True)
+    m.load_state_dict(torch.load(weightfile))
     print('Loading weights from %s... Done!' % (weightfile))
 
     if use_cuda:
@@ -143,12 +142,12 @@ def get_args():
     parser.add_argument('-cfgfile', type=str, default='./cfg/yolov4.cfg',
                         help='path of cfg file', dest='cfgfile')
     parser.add_argument('-weightfile', type=str,
-                        default='./checkpoints/Yolov4_epoch1.pth',
+                        default='./weights/yolov4.pth',
                         help='path of trained model.', dest='weightfile')
     parser.add_argument('-imgfile', type=str,
-                        default='./data/mscoco2017/train2017/190109_180343_00154162.jpg',
+                        default='./data/giraffe.jpg',
                         help='path of your image file.', dest='imgfile')
-    parser.add_argument('-torch', type=bool, default=false,
+    parser.add_argument('-torch', type=bool, default=True,
                         help='use torch weights')
     args = parser.parse_args()
 

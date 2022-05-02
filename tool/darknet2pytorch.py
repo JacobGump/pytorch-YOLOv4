@@ -483,6 +483,10 @@ class Darknet(nn.Module):
             else:
                 print('unknown type %s' % (block['type']))
 
+
+    def load_pytorch(self, weights_file):
+        self.load_state_dict(torch.load(weights_file))
+    
     # def save_weights(self, outfile, cutoff=0):
     #     if cutoff <= 0:
     #         cutoff = len(self.blocks) - 1
